@@ -1,0 +1,3919 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>HARDWARE LAB | Ensiklopedia Perangkat Keras</title>
+
+<meta
+  name="description"
+  content="Website interaktif pengenalan perangkat keras komputer dengan foto, informasi lengkap dan model 3D."
+>
+
+<style>
+/* =========================================================
+   HARDWARE LAB
+   MAIN STYLE
+========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #050b12;
+  color: #eef8ff;
+  font-family:
+    Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+
+  background:
+    radial-gradient(
+      circle at 80% 0%,
+      rgba(26, 150, 190, 0.15),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 0% 40%,
+      rgba(76, 85, 190, 0.10),
+      transparent 30%
+    );
+}
+
+/* =========================================================
+   LOADING SCREEN
+========================================================= */
+
+#loadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #03070c;
+
+  transition:
+    opacity 0.7s ease,
+    visibility 0.7s ease;
+}
+
+#loadingScreen.hidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.loader-content {
+  width: min(90%, 400px);
+  text-align: center;
+}
+
+.loader-logo {
+  width: 80px;
+  height: 80px;
+
+  margin: auto;
+
+  border-radius: 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #0c1b27;
+
+  border: 1px solid rgba(69, 220, 255, 0.4);
+
+  box-shadow:
+    0 0 30px rgba(54, 213, 255, 0.12),
+    inset 0 0 25px rgba(54, 213, 255, 0.05);
+}
+
+.loader-logo::before {
+  content: "◈";
+
+  font-size: 38px;
+
+  color: #55dcff;
+
+  animation: logoPulse 1.2s infinite;
+}
+
+@keyframes logoPulse {
+  50% {
+    transform: scale(1.15);
+    opacity: 0.5;
+  }
+}
+
+.loader-title {
+  margin-top: 22px;
+
+  font-size: 22px;
+  letter-spacing: 5px;
+  font-weight: 800;
+}
+
+.loader-subtitle {
+  margin-top: 8px;
+
+  color: #7890a5;
+  font-size: 13px;
+}
+
+.loader-bar {
+  width: 240px;
+  height: 4px;
+
+  margin: 25px auto 0;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background: #132432;
+}
+
+.loader-bar span {
+  display: block;
+
+  width: 45%;
+  height: 100%;
+
+  background: #42d9ff;
+
+  animation: loadingBar 1.1s infinite;
+}
+
+@keyframes loadingBar {
+  from {
+    transform: translateX(-130%);
+  }
+
+  to {
+    transform: translateX(350%);
+  }
+}
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  background: rgba(5, 11, 18, 0.86);
+
+  backdrop-filter: blur(18px);
+
+  border-bottom: 1px solid #1c2e3d;
+}
+
+.navbar {
+  max-width: 1250px;
+
+  margin: auto;
+
+  padding: 15px 25px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 30px;
+}
+
+.logo {
+  font-size: 18px;
+
+  font-weight: 900;
+
+  letter-spacing: 2px;
+
+  white-space: nowrap;
+}
+
+.logo span {
+  color: #45dcff;
+}
+
+.nav-links {
+  display: flex;
+
+  gap: 22px;
+
+  color: #91a5b8;
+
+  font-size: 13px;
+}
+
+.nav-links a {
+  text-decoration: none;
+
+  color: inherit;
+
+  transition: 0.2s;
+}
+
+.nav-links a:hover {
+  color: #ffffff;
+}
+
+.search-box {
+  margin-left: auto;
+
+  position: relative;
+
+  width: 300px;
+}
+
+.search-box span {
+  position: absolute;
+
+  left: 12px;
+  top: 9px;
+
+  color: #71879a;
+}
+
+.search-box input {
+  width: 100%;
+
+  padding: 10px 14px 10px 35px;
+
+  border-radius: 11px;
+
+  border: 1px solid #203546;
+
+  outline: none;
+
+  color: white;
+
+  background: #09131d;
+}
+
+/* =========================================================
+   GLOBAL
+========================================================= */
+
+.container {
+  width: min(1200px, calc(100% - 40px));
+
+  margin: auto;
+}
+
+.section {
+  padding-top: 80px;
+
+  scroll-margin-top: 100px;
+}
+
+.section-heading {
+  margin-bottom: 28px;
+}
+
+.section-label {
+  color: #45dcff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+}
+
+.section-heading h2 {
+  margin-top: 7px;
+
+  font-size: 38px;
+
+  letter-spacing: -1.5px;
+}
+
+.section-heading p {
+  max-width: 700px;
+
+  margin-top: 10px;
+
+  color: #8297aa;
+
+  line-height: 1.7;
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+  min-height: 650px;
+
+  display: grid;
+
+  grid-template-columns: 1.05fr 0.95fr;
+
+  gap: 60px;
+
+  align-items: center;
+}
+
+.hero-label {
+  color: #45dcff;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 3px;
+
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin-top: 18px;
+
+  font-size: clamp(45px, 7vw, 82px);
+
+  line-height: 0.95;
+
+  letter-spacing: -5px;
+}
+
+.hero h1 span {
+  color: #45dcff;
+}
+
+.hero-description {
+  max-width: 650px;
+
+  margin-top: 25px;
+
+  color: #8da3b5;
+
+  font-size: 16px;
+
+  line-height: 1.8;
+}
+
+.hero-buttons {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-top: 28px;
+}
+
+.button {
+  display: inline-block;
+
+  padding: 13px 19px;
+
+  border-radius: 11px;
+
+  border: 1px solid #23394a;
+
+  background: #0c1823;
+
+  color: white;
+
+  text-decoration: none;
+
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition: 0.25s;
+}
+
+.button:hover {
+  transform: translateY(-2px);
+
+  border-color: #45dcff;
+}
+
+.button-primary {
+  border: none;
+
+  background:
+    linear-gradient(
+      135deg,
+      #13a8c8,
+      #5368df
+    );
+}
+
+/* =========================================================
+   HERO VISUAL
+========================================================= */
+
+.hero-visual {
+  min-height: 430px;
+
+  border-radius: 30px;
+
+  border: 1px solid #203647;
+
+  background:
+    radial-gradient(
+      circle at center,
+      #17445a,
+      #071018 70%
+    );
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+}
+
+.fake-chip {
+  width: 240px;
+  height: 240px;
+
+  position: relative;
+
+  border-radius: 30px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #435967,
+      #101820
+    );
+
+  border: 2px solid rgba(100, 225, 255, 0.35);
+
+  transform:
+    rotateX(55deg)
+    rotateZ(-40deg);
+
+  box-shadow:
+    40px 50px 60px #000,
+    inset 0 0 50px rgba(50, 220, 255, 0.1);
+
+  animation: chipFloat 4s ease-in-out infinite;
+}
+
+.fake-chip::before {
+  content: "HARDWARE";
+
+  position: absolute;
+
+  inset: 30px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid rgba(100, 225, 255, 0.25);
+
+  color: rgba(100, 225, 255, 0.55);
+
+  letter-spacing: 3px;
+
+  font-size: 12px;
+}
+
+.fake-chip::after {
+  content: "";
+
+  position: absolute;
+
+  left: -20px;
+  right: -20px;
+
+  bottom: 15px;
+
+  height: 10px;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #d7ad4c 0 12px,
+      transparent 12px 22px
+    );
+}
+
+@keyframes chipFloat {
+  50% {
+    transform:
+      rotateX(55deg)
+      rotateZ(-40deg)
+      translateY(-15px);
+  }
+}
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+.filter-bar {
+  display: flex;
+
+  flex-wrap: wrap;
+
+  gap: 9px;
+
+  margin-bottom: 25px;
+}
+
+.filter-button {
+  border: 1px solid #213547;
+
+  background: #0a151f;
+
+  color: #91a6b8;
+
+  padding: 9px 14px;
+
+  border-radius: 999px;
+
+  cursor: pointer;
+}
+
+.filter-button:hover,
+.filter-button.active {
+  color: white;
+
+  border-color: #45dcff;
+
+  background: #123343;
+}
+
+/* =========================================================
+   HARDWARE GRID
+========================================================= */
+
+.hardware-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 18px;
+}
+
+.hardware-card {
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  border: 1px solid #1d3141;
+
+  background:
+    linear-gradient(
+      145deg,
+      #101d29,
+      #09121b
+    );
+
+  cursor: pointer;
+
+  transition:
+    transform 0.25s,
+    border-color 0.25s,
+    box-shadow 0.25s;
+}
+
+.hardware-card:hover {
+  transform: translateY(-6px);
+
+  border-color: #45dcff;
+
+  box-shadow:
+    0 25px 55px rgba(0, 0, 0, 0.45);
+}
+
+.hardware-image {
+  height: 210px;
+
+  position: relative;
+
+  background:
+    radial-gradient(
+      circle,
+      #18384b,
+      #071018
+    );
+
+  overflow: hidden;
+}
+
+.hardware-image img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.image-placeholder {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  padding: 20px;
+
+  color: #73899d;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+
+  background:
+    radial-gradient(
+      circle,
+      #18384b,
+      #071018 70%
+    );
+}
+
+.card-body {
+  padding: 19px;
+}
+
+.card-category {
+  color: #45dcff;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+.card-body h3 {
+  margin-top: 7px;
+
+  font-size: 21px;
+}
+
+.card-body p {
+  margin-top: 8px;
+
+  color: #8398aa;
+
+  font-size: 13px;
+
+  line-height: 1.65;
+}
+
+.card-detail {
+  margin-top: 15px;
+
+  font-size: 12px;
+
+  font-weight: 800;
+}
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 18px;
+}
+
+.info-panel {
+  padding: 28px;
+
+  border-radius: 22px;
+
+  border: 1px solid #203344;
+
+  background:
+    linear-gradient(
+      145deg,
+      #101d29,
+      #0a131c
+    );
+}
+
+.info-panel h3 {
+  margin-bottom: 14px;
+
+  font-size: 21px;
+}
+
+.info-panel p,
+.info-panel li {
+  color: #8499ab;
+
+  line-height: 1.8;
+
+  font-size: 14px;
+}
+
+.info-panel ul {
+  padding-left: 20px;
+
+  margin-top: 15px;
+}
+
+/* =========================================================
+   TEAM
+========================================================= */
+
+.team-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 14px;
+}
+
+.team-card {
+  padding: 22px;
+
+  border-radius: 18px;
+
+  border: 1px solid #213444;
+
+  background: #0d1823;
+}
+
+.team-number {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 15px;
+
+  border-radius: 13px;
+
+  background: #123344;
+
+  color: #45dcff;
+
+  font-weight: 900;
+}
+
+.team-card strong {
+  display: block;
+
+  font-size: 14px;
+}
+
+.team-card span {
+  display: block;
+
+  margin-top: 5px;
+
+  color: #768c9f;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   PHOTO MANAGER
+========================================================= */
+
+.photo-manager {
+  padding: 25px;
+
+  border-radius: 22px;
+
+  border: 1px solid #213444;
+
+  background:
+    linear-gradient(
+      145deg,
+      #101d29,
+      #0a131c
+    );
+}
+
+.photo-manager-info {
+  color: #8499ab;
+
+  line-height: 1.7;
+
+  font-size: 13px;
+
+  margin-bottom: 20px;
+}
+
+.photo-fields {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 10px;
+}
+
+.photo-field {
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.photo-field label {
+  width: 105px;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  color: #b8c9d7;
+}
+
+.photo-field input {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 10px;
+
+  color: white;
+
+  background: #07111a;
+
+  border: 1px solid #203344;
+
+  border-radius: 9px;
+
+  outline: none;
+}
+
+.photo-field input:focus {
+  border-color: #45dcff;
+}
+
+.save-photos {
+  margin-top: 17px;
+
+  padding: 12px 18px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #13a8c8,
+      #5368df
+    );
+
+  color: white;
+
+  font-weight: 800;
+
+  cursor: pointer;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+  margin-top: 90px;
+
+  padding: 35px 20px;
+
+  border-top: 1px solid #1c2d3c;
+
+  text-align: center;
+
+  color: #63798c;
+
+  font-size: 12px;
+}
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+.modal {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 5000;
+
+  display: none;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  background: rgba(0, 0, 0, 0.82);
+
+  backdrop-filter: blur(14px);
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-box {
+  width: min(1100px, 100%);
+
+  max-height: 94vh;
+
+  overflow: auto;
+
+  border-radius: 25px;
+
+  border: 1px solid #233849;
+
+  background: #09131d;
+
+  box-shadow:
+    0 30px 100px rgba(0,0,0,.7);
+
+  position: relative;
+}
+
+.close-modal {
+  position: absolute;
+
+  right: 15px;
+  top: 15px;
+
+  z-index: 10;
+
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+
+  border: 1px solid #2b4051;
+
+  background: #08121b;
+
+  color: white;
+
+  font-size: 23px;
+
+  cursor: pointer;
+}
+
+.detail-layout {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+}
+
+.viewer {
+  min-height: 550px;
+
+  position: relative;
+
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle,
+      #174359,
+      #061018 70%
+    );
+}
+
+.viewer canvas {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+}
+
+.viewer-hint {
+  position: absolute;
+
+  bottom: 15px;
+
+  left: 0;
+  right: 0;
+
+  text-align: center;
+
+  color: #8196a8;
+
+  font-size: 11px;
+
+  pointer-events: none;
+}
+
+.detail-info {
+  padding: 45px;
+}
+
+.detail-category {
+  color: #45dcff;
+
+  font-size: 11px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  text-transform: uppercase;
+}
+
+.detail-info h2 {
+  margin-top: 7px;
+
+  font-size: 46px;
+
+  letter-spacing: -2px;
+}
+
+.detail-lead {
+  margin-top: 15px;
+
+  color: #b7c8d6;
+
+  line-height: 1.8;
+
+  font-size: 14px;
+}
+
+.spec-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 10px;
+
+  margin: 23px 0;
+}
+
+.spec-box {
+  padding: 13px;
+
+  border-radius: 12px;
+
+  border: 1px solid #203344;
+
+  background: #0d1924;
+}
+
+.spec-box small {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #71879a;
+}
+
+.uses-title {
+  margin-top: 25px;
+}
+
+.uses {
+  padding-left: 20px;
+
+  margin-top: 10px;
+
+  color: #aebfcd;
+
+  line-height: 1.8;
+
+  font-size: 14px;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 950px) {
+
+  .hero {
+    grid-template-columns: 1fr;
+
+    padding-top: 60px;
+  }
+
+  .hardware-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .team-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .detail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .viewer {
+    min-height: 400px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nav-links {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+
+  .container {
+    width: min(
+      100% - 28px,
+      1200px
+    );
+  }
+
+  .navbar {
+    padding: 14px;
+  }
+
+  .search-box {
+    width: 45vw;
+  }
+
+  .hero h1 {
+    font-size: 48px;
+
+    letter-spacing: -3px;
+  }
+
+  .hero-visual {
+    min-height: 300px;
+  }
+
+  .fake-chip {
+    width: 170px;
+    height: 170px;
+  }
+
+  .hardware-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .team-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+  .photo-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .detail-info {
+    padding: 28px;
+  }
+
+  .detail-info h2 {
+    font-size: 36px;
+  }
+
+  .viewer {
+    min-height: 340px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOADING SCREEN
+===================================================== -->
+
+<div id="loadingScreen">
+
+  <div class="loader-content">
+
+    <div class="loader-logo"></div>
+
+    <div class="loader-title">
+      HARDWARE LAB
+    </div>
+
+    <div class="loader-subtitle">
+      Menyiapkan ensiklopedia perangkat keras...
+    </div>
+
+    <div class="loader-bar">
+      <span></span>
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<header>
+
+  <nav class="navbar">
+
+    <div class="logo">
+      HARDWARE<span>LAB</span>
+    </div>
+
+    <div class="nav-links">
+
+      <a href="#home">
+        Beranda
+      </a>
+
+      <a href="#koleksi">
+        Koleksi
+      </a>
+
+      <a href="#tentang">
+        Tentang
+      </a>
+
+      <a href="#tim">
+        Kelompok
+      </a>
+
+    </div>
+
+    <div class="search-box">
+
+      <span>⌕</span>
+
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Cari perangkat..."
+      >
+
+    </div>
+
+  </nav>
+
+</header>
+
+
+<main>
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section
+  id="home"
+  class="container hero"
+>
+
+  <div>
+
+    <div class="hero-label">
+      Interactive Computer Hardware Encyclopedia
+    </div>
+
+    <h1>
+      Kenali perangkat.<br>
+      <span>Pahami fungsinya.</span>
+    </h1>
+
+    <p class="hero-description">
+
+      Selamat datang di HARDWARE LAB, website pembelajaran
+      interaktif yang memperkenalkan berbagai perangkat keras
+      komputer. Pelajari nama perangkat, fungsi, kegunaan,
+      spesifikasi dasar, foto, dan model 3D interaktifnya.
+
+    </p>
+
+    <div class="hero-buttons">
+
+      <a
+        href="#koleksi"
+        class="button button-primary"
+      >
+        Jelajahi 15 Perangkat
+      </a>
+
+      <a
+        href="#tentang"
+        class="button"
+      >
+        Tentang Website
+      </a>
+
+    </div>
+
+  </div>
+
+
+  <div class="hero-visual">
+
+    <div class="fake-chip"></div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     HARDWARE COLLECTION
+===================================================== -->
+
+<section
+  id="koleksi"
+  class="container section"
+>
+
+  <div class="section-heading">
+
+    <div class="section-label">
+      Hardware Collection
+    </div>
+
+    <h2>
+      15 Perangkat Keras
+    </h2>
+
+    <p>
+      Pilih perangkat untuk melihat informasi lengkap,
+      fungsi, spesifikasi dasar, dan model 3D.
+    </p>
+
+  </div>
+
+
+  <div
+    id="filterBar"
+    class="filter-bar"
+  ></div>
+
+
+  <div
+    id="hardwareGrid"
+    class="hardware-grid"
+  ></div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section
+  id="tentang"
+  class="container section"
+>
+
+  <div class="section-heading">
+
+    <div class="section-label">
+      Project Overview
+    </div>
+
+    <h2>
+      Tentang Website
+    </h2>
+
+  </div>
+
+
+  <div class="about-grid">
+
+    <div class="info-panel">
+
+      <h3>
+        Tujuan Pembelajaran
+      </h3>
+
+      <p>
+
+        Website ini dibuat sebagai media pengenalan perangkat
+        keras komputer dengan tampilan interaktif. Pengunjung
+        dapat mengetahui bentuk perangkat, nama, fungsi,
+        kegunaan dan hubungan perangkat tersebut dengan sistem
+        komputer.
+
+      </p>
+
+      <ul>
+
+        <li>
+          Mengenali perangkat keras komputer.
+        </li>
+
+        <li>
+          Memahami fungsi setiap perangkat.
+        </li>
+
+        <li>
+          Mengetahui contoh penggunaan perangkat.
+        </li>
+
+        <li>
+          Melihat model perangkat dalam bentuk 3D.
+        </li>
+
+        <li>
+          Memahami komponen komputer secara dasar.
+        </li>
+
+      </ul>
+
+    </div>
+
+
+    <div class="info-panel">
+
+      <h3>
+        Cara Menggunakan
+      </h3>
+
+      <p>
+
+        Gunakan pencarian untuk menemukan perangkat.
+        Gunakan filter kategori untuk mempersempit daftar.
+        Klik salah satu perangkat untuk membuka halaman detail.
+
+      </p>
+
+      <p style="margin-top:15px">
+
+        Pada halaman detail terdapat model 3D.
+        Model dapat diputar menggunakan mouse atau touchpad,
+        diperbesar dengan scroll, dan dikembalikan ke posisi
+        awal dengan double-click.
+
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =====================================================
+     TEAM
+===================================================== -->
+
+<section
+  id="tim"
+  class="container section"
+>
+
+  <div class="section-heading">
+
+    <div class="section-label">
+      Project Team
+    </div>
+
+    <h2>
+      Anggota Kelompok
+    </h2>
+
+    <p>
+      Delapan slot anggota kelompok sudah disediakan.
+      Besok Anda tinggal mengganti nama sesuai anggota.
+    </p>
+
+  </div>
+
+
+  <div
+    id="teamGrid"
+    class="team-grid"
+  ></div>
+
+</section>
+
+
+<!-- =====================================================
+     PHOTO MANAGER
+===================================================== -->
+
+<section
+  class="container section"
+>
+
+  <div class="section-heading">
+
+    <div class="section-label">
+      Photo Manager
+    </div>
+
+    <h2>
+      Tempat Memasukkan Link Foto
+    </h2>
+
+    <p>
+      Masukkan direct URL gambar pada kolom berikut.
+      Setelah disimpan, foto tersebut akan digunakan
+      oleh kartu perangkat.
+    </p>
+
+  </div>
+
+
+  <div class="photo-manager">
+
+    <div class="photo-manager-info">
+
+      Contoh format:
+
+      <b>
+        https://website-anda.com/foto.jpg
+      </b>
+
+      <br>
+
+      Gunakan URL gambar langsung dengan format JPG,
+      PNG atau WebP.
+
+    </div>
+
+
+    <div
+      id="photoFields"
+      class="photo-fields"
+    ></div>
+
+
+    <button
+      id="savePhotos"
+      class="save-photos"
+    >
+      Simpan Semua Foto
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+  HARDWARE LAB
+
+  <br>
+
+  Ensiklopedia Interaktif Perangkat Keras Komputer
+
+  <br><br>
+
+  Dibuat sebagai media pembelajaran.
+
+</footer>
+
+
+<!-- =====================================================
+     DETAIL MODAL
+===================================================== -->
+
+<div
+  id="detailModal"
+  class="modal"
+>
+
+  <div class="modal-box">
+
+    <button
+      id="closeModal"
+      class="close-modal"
+    >
+      ×
+    </button>
+
+
+    <div class="detail-layout">
+
+
+      <!-- 3D VIEWER -->
+
+      <div
+        id="viewer"
+        class="viewer"
+      >
+
+        <div class="viewer-hint">
+
+          Drag untuk memutar
+          •
+          Scroll untuk zoom
+          •
+          Double-click untuk reset
+
+        </div>
+
+      </div>
+
+
+      <!-- DETAIL INFORMATION -->
+
+      <div class="detail-info">
+
+        <div
+          id="detailCategory"
+          class="detail-category"
+        ></div>
+
+        <h2
+          id="detailName"
+        ></h2>
+
+        <p
+          id="detailDescription"
+          class="detail-lead"
+        ></p>
+
+
+        <div
+          id="specGrid"
+          class="spec-grid"
+        ></div>
+
+
+        <h3 class="uses-title">
+          Kegunaan Utama
+        </h3>
+
+        <ul
+          id="detailUses"
+          class="uses"
+        ></ul>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     THREE.JS
+===================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.min.js"></script>
+
+
+<script>
+
+/* =========================================================
+   DATA 15 PERANGKAT
+========================================================= */
+
+const hardware = [
+
+  {
+    name: "CPU",
+    category: "Processor",
+
+    short:
+      "Unit pemroses utama yang menjalankan instruksi komputer.",
+
+    description:
+      "CPU atau Central Processing Unit merupakan pusat pemrosesan komputer. CPU bertugas mengambil, menerjemahkan dan menjalankan instruksi dari sistem operasi maupun aplikasi. CPU melakukan operasi aritmatika, logika, pengendalian aliran program serta mengatur berbagai proses yang berjalan di komputer.",
+
+    specs: [
+      ["Komponen", "Processor"],
+      ["Antarmuka", "Socket CPU"]
+    ],
+
+    uses: [
+      "Menjalankan instruksi program.",
+      "Melakukan perhitungan aritmatika dan logika.",
+      "Mengatur proses kerja komputer.",
+      "Mendukung multitasking dan aplikasi."
+    ]
+  },
+
+
+  {
+    name: "GPU",
+    category: "Graphics",
+
+    short:
+      "Perangkat pemroses grafis untuk menghasilkan gambar dan video.",
+
+    description:
+      "GPU atau Graphics Processing Unit merupakan perangkat yang dirancang untuk melakukan pemrosesan grafis secara cepat dan paralel. GPU digunakan pada game, desain 3D, editing video, visualisasi dan berbagai aplikasi yang membutuhkan pemrosesan grafis.",
+
+    specs: [
+      ["Interface", "PCI Express"],
+      ["Memori", "VRAM"]
+    ],
+
+    uses: [
+      "Menghasilkan tampilan grafis.",
+      "Merender objek 2D dan 3D.",
+      "Membantu proses editing video.",
+      "Menjalankan game dan aplikasi grafis."
+    ]
+  },
+
+
+  {
+    name: "RAM",
+    category: "Memory",
+
+    short:
+      "Memori sementara yang digunakan komputer saat menjalankan program.",
+
+    description:
+      "RAM atau Random Access Memory adalah tempat penyimpanan sementara untuk data dan instruksi yang sedang digunakan komputer. RAM memungkinkan CPU mengakses data dengan cepat sehingga aplikasi dapat berjalan lebih responsif.",
+
+    specs: [
+      ["Jenis", "DDR4 / DDR5"],
+      ["Sifat", "Volatile"]
+    ],
+
+    uses: [
+      "Menyimpan data sementara.",
+      "Membantu menjalankan banyak aplikasi.",
+      "Menyimpan instruksi yang sedang diproses.",
+      "Meningkatkan respons multitasking."
+    ]
+  },
+
+
+  {
+    name: "Motherboard",
+    category: "Mainboard",
+
+    short:
+      "Papan utama yang menghubungkan seluruh perangkat komputer.",
+
+    description:
+      "Motherboard merupakan papan sirkuit utama komputer. Perangkat ini menyediakan socket processor, slot RAM, slot kartu ekspansi, konektor storage, konektor daya dan berbagai port input maupun output.",
+
+    specs: [
+      ["Form Factor", "ATX / mATX / ITX"],
+      ["Slot", "PCIe / DIMM"]
+    ],
+
+    uses: [
+      "Menghubungkan seluruh komponen komputer.",
+      "Menyediakan jalur komunikasi antar perangkat.",
+      "Menyediakan slot RAM dan kartu ekspansi.",
+      "Mengatur distribusi daya ke komponen."
+    ]
+  },
+
+
+  {
+    name: "SSD",
+    category: "Storage",
+
+    short:
+      "Media penyimpanan berbasis flash dengan akses data cepat.",
+
+    description:
+      "SSD atau Solid State Drive merupakan media penyimpanan yang menggunakan memori flash. SSD tidak menggunakan piringan mekanis sehingga memiliki waktu akses yang cepat dan sangat cocok untuk sistem operasi, aplikasi serta penyimpanan data.",
+
+    specs: [
+      ["Teknologi", "Flash NAND"],
+      ["Interface", "SATA / NVMe"]
+    ],
+
+    uses: [
+      "Menyimpan sistem operasi.",
+      "Menyimpan aplikasi dan game.",
+      "Menyimpan dokumen dan file.",
+      "Mempercepat proses booting dan loading."
+    ]
+  },
+
+
+  {
+    name: "HDD",
+    category: "Storage",
+
+    short:
+      "Media penyimpanan magnetik dengan piringan berputar.",
+
+    description:
+      "HDD atau Hard Disk Drive menggunakan piringan magnetik atau platter untuk menyimpan data. HDD banyak digunakan untuk penyimpanan berkapasitas besar seperti arsip, video, dokumen dan backup.",
+
+    specs: [
+      ["Teknologi", "Magnetic Disk"],
+      ["Interface", "SATA"]
+    ],
+
+    uses: [
+      "Menyimpan file dalam jumlah besar.",
+      "Menyimpan backup.",
+      "Menyimpan arsip.",
+      "Menyimpan koleksi video dan dokumen."
+    ]
+  },
+
+
+  {
+    name: "PSU",
+    category: "Power",
+
+    short:
+      "Unit yang menyediakan dan mengatur daya listrik komputer.",
+
+    description:
+      "Power Supply Unit atau PSU mengubah listrik AC dari sumber listrik menjadi tegangan DC yang dibutuhkan komputer. PSU memasok daya ke motherboard, CPU, GPU, storage dan perangkat lainnya.",
+
+    specs: [
+      ["Fungsi", "Power Supply"],
+      ["Output", "Watt"]
+    ],
+
+    uses: [
+      "Menyediakan daya komputer.",
+      "Mengubah AC menjadi DC.",
+      "Memberikan daya ke motherboard.",
+      "Memberikan daya ke GPU dan storage."
+    ]
+  },
+
+
+  {
+    name: "Cooling",
+    category: "Cooling",
+
+    short:
+      "Sistem pendingin untuk menjaga suhu komponen komputer.",
+
+    description:
+      "Cooling system digunakan untuk membuang panas yang dihasilkan komponen komputer. Sistem pendingin dapat berupa heatsink dan fan maupun liquid cooling.",
+
+    specs: [
+      ["Jenis", "Air / Liquid"],
+      ["Target", "CPU / GPU"]
+    ],
+
+    uses: [
+      "Menurunkan temperatur komponen.",
+      "Mencegah overheating.",
+      "Menjaga stabilitas sistem.",
+      "Membantu mempertahankan performa komputer."
+    ]
+  },
+
+
+  {
+    name: "Case",
+    category: "Chassis",
+
+    short:
+      "Casing yang melindungi dan menjadi tempat komponen komputer.",
+
+    description:
+      "Computer case merupakan tempat untuk memasang motherboard, PSU, storage, GPU dan perangkat lainnya. Case juga membantu airflow dan manajemen kabel.",
+
+    specs: [
+      ["Format", "ATX / mATX / ITX"],
+      ["Fungsi", "Proteksi & Airflow"]
+    ],
+
+    uses: [
+      "Melindungi komponen.",
+      "Menjadi tempat pemasangan hardware.",
+      "Mengatur aliran udara.",
+      "Membantu manajemen kabel."
+    ]
+  },
+
+
+  {
+    name: "NIC",
+    category: "Network",
+
+    short:
+      "Perangkat yang menghubungkan komputer ke jaringan.",
+
+    description:
+      "Network Interface Card atau NIC merupakan perangkat jaringan yang memungkinkan komputer berkomunikasi dengan komputer lain melalui jaringan. NIC dapat menggunakan koneksi Ethernet kabel maupun teknologi jaringan tertentu.",
+
+    specs: [
+      ["Interface", "PCIe / Onboard"],
+      ["Port", "RJ-45"]
+    ],
+
+    uses: [
+      "Menghubungkan komputer ke jaringan.",
+      "Mengirim data melalui jaringan.",
+      "Menerima paket data.",
+      "Mendukung koneksi internet."
+    ]
+  },
+
+
+  {
+    name: "Sound Card",
+    category: "Audio",
+
+    short:
+      "Perangkat yang menangani input dan output audio komputer.",
+
+    description:
+      "Sound card digunakan untuk mengolah sinyal audio. Perangkat ini dapat mengubah data audio digital menjadi sinyal yang dapat didengar melalui speaker atau headphone dan juga dapat menerima input dari microphone.",
+
+    specs: [
+      ["Output", "Speaker / Headphone"],
+      ["Input", "Microphone"]
+    ],
+
+    uses: [
+      "Menghasilkan suara komputer.",
+      "Menghubungkan speaker.",
+      "Menghubungkan headphone.",
+      "Menerima input microphone."
+    ]
+  },
+
+
+  {
+    name: "Wi-Fi",
+    category: "Wireless",
+
+    short:
+      "Adaptor untuk menghubungkan komputer ke jaringan Wi-Fi.",
+
+    description:
+      "Wi-Fi adapter memungkinkan komputer terhubung ke jaringan nirkabel tanpa menggunakan kabel Ethernet. Adapter dapat berbentuk kartu PCIe, modul internal maupun perangkat USB.",
+
+    specs: [
+      ["Teknologi", "Wi-Fi"],
+      ["Interface", "PCIe / USB / M.2"]
+    ],
+
+    uses: [
+      "Menghubungkan komputer ke Wi-Fi.",
+      "Mengakses internet tanpa kabel.",
+      "Menghubungkan komputer ke jaringan lokal.",
+      "Pada beberapa perangkat mendukung Bluetooth."
+    ]
+  },
+
+
+  {
+    name: "Optical",
+    category: "Storage",
+
+    short:
+      "Perangkat untuk membaca atau menulis CD, DVD dan Blu-ray.",
+
+    description:
+      "Optical drive merupakan perangkat yang menggunakan teknologi laser untuk membaca atau menulis media optik seperti CD, DVD dan Blu-ray.",
+
+    specs: [
+      ["Media", "CD / DVD / Blu-ray"],
+      ["Interface", "SATA / USB"]
+    ],
+
+    uses: [
+      "Membaca CD.",
+      "Membaca DVD.",
+      "Membaca Blu-ray pada perangkat yang mendukung.",
+      "Membaca arsip pada media optik."
+    ]
+  },
+
+
+  {
+    name: "Capture Card",
+    category: "Video",
+
+    short:
+      "Perangkat untuk menangkap sinyal video dari perangkat eksternal.",
+
+    description:
+      "Capture card digunakan untuk mengambil sinyal video dari perangkat lain seperti kamera, konsol game atau komputer kemudian meneruskannya ke komputer untuk direkam atau ditampilkan melalui software.",
+
+    specs: [
+      ["Input", "HDMI"],
+      ["Penggunaan", "Streaming / Recording"]
+    ],
+
+    uses: [
+      "Streaming game.",
+      "Merekam gameplay.",
+      "Mengambil video dari kamera.",
+      "Merekam presentasi atau perangkat lain."
+    ]
+  },
+
+
+  {
+    name: "Controller",
+    category: "I/O",
+
+    short:
+      "Pengendali komunikasi antara komputer dan perangkat I/O.",
+
+    description:
+      "Controller bertugas mengatur komunikasi antara sistem komputer dan perangkat input maupun output tertentu. Controller dapat menjadi bagian dari motherboard atau perangkat ekspansi.",
+
+    specs: [
+      ["Interface", "PCIe / Onboard"],
+      ["Fungsi", "I/O Management"]
+    ],
+
+    uses: [
+      "Mengatur komunikasi perangkat.",
+      "Mengelola jalur input dan output.",
+      "Mendukung perangkat peripheral.",
+      "Membantu sistem berkomunikasi dengan hardware."
+    ]
+  }
+
+];
+
+
+/* =========================================================
+   15 TEMPAT FOTO
+   =========================================================
+
+   GANTI BAGIAN DALAM TANDA KUTIP
+   DENGAN LINK FOTO ANDA.
+
+   Contoh:
+
+   "CPU":
+   "https://website.com/cpu.jpg"
+
+========================================================= */
+
+const imageMap = {
+
+  "CPU":
+    "LINK_FOTO_CPU_ANDA",
+
+  "GPU":
+    "LINK_FOTO_GPU_ANDA",
+
+  "RAM":
+    "LINK_FOTO_RAM_ANDA",
+
+  "Motherboard":
+    "LINK_FOTO_MOTHERBOARD_ANDA",
+
+  "SSD":
+    "LINK_FOTO_SSD_ANDA",
+
+  "HDD":
+    "LINK_FOTO_HDD_ANDA",
+
+  "PSU":
+    "LINK_FOTO_PSU_ANDA",
+
+  "Cooling":
+    "LINK_FOTO_COOLING_ANDA",
+
+  "Case":
+    "LINK_FOTO_CASE_ANDA",
+
+  "NIC":
+    "LINK_FOTO_NIC_ANDA",
+
+  "Sound Card":
+    "LINK_FOTO_SOUND_CARD_ANDA",
+
+  "Wi-Fi":
+    "LINK_FOTO_WIFI_ANDA",
+
+  "Optical":
+    "LINK_FOTO_OPTICAL_ANDA",
+
+  "Capture Card":
+    "LINK_FOTO_CAPTURE_CARD_ANDA",
+
+  "Controller":
+    "LINK_FOTO_CONTROLLER_ANDA"
+
+};
+
+
+/* =========================================================
+   8 ANGGOTA KELOMPOK
+========================================================= */
+
+const members = [
+
+  {
+    name: "NAMA ANGGOTA 1",
+    role: "Ketua / Presenter"
+  },
+
+  {
+    name: "NAMA ANGGOTA 2",
+    role: "Anggota"
+  },
+
+  {
+    name: "NAMA ANGGOTA 3",
+    role: "Anggota"
+  },
+
+  {
+    name: "NAMA ANGGOTA 4",
+    role: "Anggota"
+  },
+
+  {
+    name: "NAMA ANGGOTA 5",
+    role: "Anggota"
+  },
+
+  {
+    name: "NAMA ANGGOTA 6",
+    role: "Anggota"
+  },
+
+  {
+    name: "NAMA ANGGOTA 7",
+    role: "Anggota"
+  },
+
+  {
+    name: "NAMA ANGGOTA 8",
+    role: "Anggota"
+  }
+
+];
+
+
+/* =========================================================
+   ELEMENT
+========================================================= */
+
+const hardwareGrid =
+  document.getElementById("hardwareGrid");
+
+const filterBar =
+  document.getElementById("filterBar");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const teamGrid =
+  document.getElementById("teamGrid");
+
+const photoFields =
+  document.getElementById("photoFields");
+
+const modal =
+  document.getElementById("detailModal");
+
+
+/* =========================================================
+   CATEGORY
+========================================================= */
+
+const categories = [
+  "Semua",
+  "Processor",
+  "Graphics",
+  "Memory",
+  "Mainboard",
+  "Storage",
+  "Power",
+  "Cooling",
+  "Chassis",
+  "Network",
+  "Audio",
+  "Wireless",
+  "Video",
+  "I/O"
+];
+
+
+let activeCategory = "Semua";
+
+
+/* =========================================================
+   FILTER BUTTON
+========================================================= */
+
+categories.forEach(category => {
+
+  const button =
+    document.createElement("button");
+
+  button.className =
+    "filter-button" +
+    (category === "Semua"
+      ? " active"
+      : "");
+
+  button.textContent =
+    category;
+
+  button.addEventListener(
+    "click",
+    () => {
+
+      document
+        .querySelectorAll(".filter-button")
+        .forEach(btn =>
+          btn.classList.remove("active")
+        );
+
+      button.classList.add("active");
+
+      activeCategory =
+        category;
+
+      renderHardware();
+
+    }
+  );
+
+  filterBar.appendChild(button);
+
+});
+
+
+/* =========================================================
+   IMAGE FUNCTION
+========================================================= */
+
+function getImageHTML(item) {
+
+  const url =
+    imageMap[item.name];
+
+  if (
+    !url ||
+    url.startsWith("LINK_FOTO_")
+  ) {
+
+    return `
+      <div class="image-placeholder">
+
+        <div>
+
+          <strong>
+            FOTO ${item.name.toUpperCase()}
+          </strong>
+
+          <br><br>
+
+          Masukkan link foto pada
+          bagian <b>imageMap</b>
+          di dalam kode.
+
+        </div>
+
+      </div>
+    `;
+
+  }
+
+
+  return `
+
+    <img
+      src="${url}"
+      alt="Foto ${item.name}"
+      loading="lazy"
+      onerror="
+        this.style.display='none';
+        this.nextElementSibling.style.display='flex';
+      "
+    >
+
+    <div
+      class="image-placeholder"
+      style="display:none"
+    >
+
+      Foto gagal dimuat.
+      Periksa URL gambar.
+
+    </div>
+
+  `;
+
+}
+
+
+/* =========================================================
+   RENDER HARDWARE
+========================================================= */
+
+function renderHardware() {
+
+  const search =
+    searchInput.value
+      .toLowerCase()
+      .trim();
+
+
+  const filtered =
+    hardware.filter(item => {
+
+      const categoryMatch =
+        activeCategory === "Semua" ||
+        item.category === activeCategory;
+
+
+      const searchMatch =
+        (
+          item.name +
+          " " +
+          item.category +
+          " " +
+          item.short +
+          " " +
+          item.description
+        )
+        .toLowerCase()
+        .includes(search);
+
+
+      return (
+        categoryMatch &&
+        searchMatch
+      );
+
+    });
+
+
+  if (!filtered.length) {
+
+    hardwareGrid.innerHTML = `
+
+      <div
+        style="
+          grid-column:1/-1;
+          text-align:center;
+          padding:60px;
+          color:#8196a8;
+        "
+      >
+
+        Perangkat tidak ditemukan.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  hardwareGrid.innerHTML =
+    filtered.map(item => {
+
+      const index =
+        hardware.indexOf(item);
+
+
+      return `
+
+        <article
+          class="hardware-card"
+          onclick="openHardware(${index})"
+        >
+
+          <div class="hardware-image">
+
+            ${getImageHTML(item)}
+
+          </div>
+
+
+          <div class="card-body">
+
+            <div class="card-category">
+              ${item.category}
+            </div>
+
+            <h3>
+              ${item.name}
+            </h3>
+
+            <p>
+              ${item.short}
+            </p>
+
+            <div class="card-detail">
+              Lihat detail + model 3D →
+            </div>
+
+          </div>
+
+        </article>
+
+      `;
+
+    }).join("");
+
+}
+
+
+searchInput.addEventListener(
+  "input",
+  renderHardware
+);
+
+
+/* =========================================================
+   TEAM
+========================================================= */
+
+teamGrid.innerHTML =
+  members.map((member, index) => {
+
+    return `
+
+      <div class="team-card">
+
+        <div class="team-number">
+
+          ${String(index + 1).padStart(2, "0")}
+
+        </div>
+
+        <strong>
+          ${member.name}
+        </strong>
+
+        <span>
+          ${member.role}
+        </span>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+
+/* =========================================================
+   PHOTO MANAGER
+========================================================= */
+
+photoFields.innerHTML =
+  hardware.map(item => {
+
+    return `
+
+      <div class="photo-field">
+
+        <label>
+          ${item.name}
+        </label>
+
+        <input
+          type="url"
+          data-photo="${item.name}"
+          placeholder="https://contoh.com/foto.jpg"
+        >
+
+      </div>
+
+    `;
+
+  }).join("");
+
+
+/* =========================================================
+   LOAD SAVED PHOTOS
+========================================================= */
+
+try {
+
+  const saved =
+    JSON.parse(
+      localStorage.getItem(
+        "hardwareLabPhotos"
+      ) || "{}"
+    );
+
+
+  Object.keys(saved).forEach(name => {
+
+    imageMap[name] =
+      saved[name];
+
+  });
+
+
+  document
+    .querySelectorAll("[data-photo]")
+    .forEach(input => {
+
+      const name =
+        input.dataset.photo;
+
+      if (
+        imageMap[name] &&
+        !imageMap[name].startsWith("LINK_FOTO_")
+      ) {
+
+        input.value =
+          imageMap[name];
+
+      }
+
+    });
+
+} catch (error) {
+
+  console.log(
+    "Belum ada foto tersimpan."
+  );
+
+}
+
+
+/* =========================================================
+   SAVE PHOTOS
+========================================================= */
+
+document
+  .getElementById("savePhotos")
+  .addEventListener(
+    "click",
+    () => {
+
+      const saved = {};
+
+
+      document
+        .querySelectorAll("[data-photo]")
+        .forEach(input => {
+
+          const name =
+            input.dataset.photo;
+
+          const value =
+            input.value.trim();
+
+
+          if (value) {
+
+            imageMap[name] =
+              value;
+
+            saved[name] =
+              value;
+
+          }
+
+        });
+
+
+      localStorage.setItem(
+        "hardwareLabPhotos",
+        JSON.stringify(saved)
+      );
+
+
+      renderHardware();
+
+
+      alert(
+        "Link foto berhasil disimpan."
+      );
+
+    }
+  );
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+document
+  .getElementById("closeModal")
+  .addEventListener(
+    "click",
+    closeModal
+  );
+
+
+modal.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target === modal
+    ) {
+
+      closeModal();
+
+    }
+
+  }
+);
+
+
+function closeModal() {
+
+  modal.classList.remove(
+    "show"
+  );
+
+}
+
+
+/* =========================================================
+   THREE.JS VARIABLES
+========================================================= */
+
+let scene;
+
+let camera;
+
+let renderer;
+
+let modelGroup;
+
+let rotationX = 0.15;
+
+let rotationY = 0.35;
+
+let zoomDistance = 6;
+
+let dragging = false;
+
+let previousX = 0;
+
+let previousY = 0;
+
+
+/* =========================================================
+   THREE.JS MATERIAL
+========================================================= */
+
+function material(
+  color,
+  metalness = 0.6,
+  roughness = 0.3
+) {
+
+  return new THREE.MeshStandardMaterial({
+
+    color,
+
+    metalness,
+
+    roughness
+
+  });
+
+}
+
+
+/* =========================================================
+   CREATE BOX
+========================================================= */
+
+function createBox(
+  group,
+  width,
+  height,
+  depth,
+  mat,
+  x = 0,
+  y = 0,
+  z = 0
+) {
+
+  const mesh =
+    new THREE.Mesh(
+      new THREE.BoxGeometry(
+        width,
+        height,
+        depth
+      ),
+      mat
+    );
+
+
+  mesh.position.set(
+    x,
+    y,
+    z
+  );
+
+
+  mesh.castShadow = true;
+
+  mesh.receiveShadow = true;
+
+
+  group.add(mesh);
+
+
+  return mesh;
+
+}
+
+
+/* =========================================================
+   CREATE CYLINDER
+========================================================= */
+
+function createCylinder(
+  group,
+  radius,
+  height,
+  mat,
+  x = 0,
+  y = 0,
+  z = 0
+) {
+
+  const mesh =
+    new THREE.Mesh(
+      new THREE.CylinderGeometry(
+        radius,
+        radius,
+        height,
+        32
+      ),
+      mat
+    );
+
+
+  mesh.position.set(
+    x,
+    y,
+    z
+  );
+
+
+  mesh.castShadow = true;
+
+
+  group.add(mesh);
+
+
+  return mesh;
+
+}
+
+
+/* =========================================================
+   CREATE HARDWARE MODEL
+========================================================= */
+
+function createHardwareModel(index) {
+
+  const group =
+    new THREE.Group();
+
+
+  const pcb =
+    material(
+      0x124a38,
+      0.35,
+      0.55
+    );
+
+
+  const black =
+    material(
+      0x10161c,
+      0.7,
+      0.35
+    );
+
+
+  const metal =
+    material(
+      0x778593,
+      0.9,
+      0.22
+    );
+
+
+  const gold =
+    material(
+      0xc9a03f,
+      0.85,
+      0.2
+    );
+
+
+  const blue =
+    material(
+      0x158cad,
+      0.6,
+      0.25
+    );
+
+
+  /* CPU */
+
+  if (index === 0) {
+
+    createBox(
+      group,
+      2.8,
+      0.12,
+      2.1,
+      pcb
+    );
+
+    createBox(
+      group,
+      1.15,
+      0.18,
+      1.15,
+      metal,
+      0,
+      0.15,
+      0
+    );
+
+    createBox(
+      group,
+      0.75,
+      0.2,
+      0.75,
+      black,
+      0,
+      0.28,
+      0
+    );
+
+  }
+
+
+  /* GPU */
+
+  else if (index === 1) {
+
+    createBox(
+      group,
+      3.3,
+      0.2,
+      1.35,
+      black
+    );
+
+    createBox(
+      group,
+      1.8,
+      0.25,
+      0.85,
+      pcb,
+      0,
+      0.25,
+      0
+    );
+
+    createCylinder(
+      group,
+      0.42,
+      0.18,
+      black,
+      -0.75,
+      0.45,
+      0
+    );
+
+    createCylinder(
+      group,
+      0.42,
+      0.18,
+      black,
+      0.75,
+      0.45,
+      0
+    );
+
+  }
+
+
+  /* RAM */
+
+  else if (index === 2) {
+
+    createBox(
+      group,
+      3.1,
+      0.13,
+      0.55,
+      pcb
+    );
+
+
+    for (
+      let x = -1.2;
+      x <= 1.2;
+      x += 0.4
+    ) {
+
+      createBox(
+        group,
+        0.18,
+        0.35,
+        0.4,
+        black,
+        x,
+        0.16,
+        0
+      );
+
+    }
+
+  }
+
+
+  /* MOTHERBOARD */
+
+  else if (index === 3) {
+
+    createBox(
+      group,
+      3.8,
+      0.1,
+      2.8,
+      pcb
+    );
+
+    createBox(
+      group,
+      1.0,
+      0.18,
+      1.0,
+      black,
+      -0.5,
+      0.14,
+      -0.25
+    );
+
+
+    for (
+      let x = -1;
+      x <= 1;
+      x += 0.5
+    ) {
+
+      createBox(
+        group,
+        0.25,
+        0.12,
+        1.7,
+        black,
+        x,
+        0.12,
+        0.15
+      );
+
+    }
+
+  }
+
+
+  /* SSD */
+
+  else if (index === 4) {
+
+    createBox(
+      group,
+      2.5,
+      0.18,
+      1.2,
+      black
+    );
+
+    createBox(
+      group,
+      2.0,
+      0.22,
+      0.7,
+      blue,
+      0,
+      0.2,
+      0
+    );
+
+  }
+
+
+  /* HDD */
+
+  else if (index === 5) {
+
+    createBox(
+      group,
+      2.4,
+      0.55,
+      1.65,
+      metal
+    );
+
+    createCylinder(
+      group,
+      0.55,
+      0.08,
+      black,
+      0,
+      0.3,
+      0.85
+    );
+
+  }
+
+
+  /* PSU */
+
+  else if (index === 6) {
+
+    createBox(
+      group,
+      2.2,
+      1.9,
+      1.7,
+      black
+    );
+
+    createBox(
+      group,
+      1.5,
+      1.2,
+      0.08,
+      metal,
+      0,
+      0.1,
+      0.87
+    );
+
+    createCylinder(
+      group,
+      0.5,
+      0.1,
+      black,
+      0,
+      0.1,
+      0.94
+    );
+
+  }
+
+
+  /* COOLING */
+
+  else if (index === 7) {
+
+    createCylinder(
+      group,
+      1.15,
+      0.28,
+      black
+    );
+
+    createCylinder(
+      group,
+      0.25,
+      0.32,
+      blue,
+      0,
+      0,
+      0.2
+    );
+
+
+    for (
+      let i = 0;
+      i < 6;
+      i++
+    ) {
+
+      const blade =
+        createBox(
+          group,
+          0.18,
+          0.7,
+          0.06,
+          blue,
+          0,
+          0,
+          0.2
+        );
+
+      blade.rotation.z =
+        i * Math.PI / 3;
+
+    }
+
+  }
+
+
+  /* CASE */
+
+  else if (index === 8) {
+
+    createBox(
+      group,
+      2.7,
+      4,
+      1.6,
+      black
+    );
+
+    createBox(
+      group,
+      1.8,
+      2.2,
+      0.08,
+      metal,
+      0,
+      0.2,
+      0.83
+    );
+
+  }
+
+
+  /* NIC */
+
+  else if (index === 9) {
+
+    createBox(
+      group,
+      2.8,
+      0.16,
+      1.15,
+      pcb
+    );
+
+    createBox(
+      group,
+      1.7,
+      0.2,
+      0.7,
+      blue,
+      0,
+      0.2,
+      0
+    );
+
+    createCylinder(
+      group,
+      0.2,
+      0.2,
+      gold,
+      -0.7,
+      0.32,
+      0
+    );
+
+  }
+
+
+  /* SOUND CARD */
+
+  else if (index === 10) {
+
+    createBox(
+      group,
+      2.8,
+      0.16,
+      1.15,
+      black
+    );
+
+    createBox(
+      group,
+      1.8,
+      0.2,
+      0.7,
+      blue,
+      0,
+      0.2,
+      0
+    );
+
+    for (
+      let x = -0.7;
+      x <= 0.7;
+      x += 0.35
+    ) {
+
+      createCylinder(
+        group,
+        0.08,
+        0.2,
+        gold,
+        x,
+        0.32,
+        0.4
+      );
+
+    }
+
+  }
+
+
+  /* WIFI */
+
+  else if (index === 11) {
+
+    createBox(
+      group,
+      2.6,
+      0.16,
+      1.1,
+      pcb
+    );
+
+    createCylinder(
+      group,
+      0.35,
+      0.2,
+      metal,
+      0,
+      0.25,
+      0.3
+    );
+
+  }
+
+
+  /* OPTICAL */
+
+  else if (index === 12) {
+
+    createBox(
+      group,
+      3,
+      0.55,
+      1.8,
+      black
+    );
+
+    createBox(
+      group,
+      2,
+      0.12,
+      1.1,
+      metal,
+      0,
+      0.35,
+      0
+    );
+
+  }
+
+
+  /* CAPTURE */
+
+  else if (index === 13) {
+
+    createBox(
+      group,
+      2.6,
+      0.55,
+      1.7,
+      black
+    );
+
+    createBox(
+      group,
+      1.8,
+      0.2,
+      0.8,
+      blue,
+      0,
+      0.35,
+      0
+    );
+
+  }
+
+
+  /* CONTROLLER */
+
+  else {
+
+    createBox(
+      group,
+      2.8,
+      0.16,
+      1.4,
+      pcb
+    );
+
+    createBox(
+      group,
+      1.0,
+      0.35,
+      0.8,
+      black,
+      0,
+      0.25,
+      0
+    );
+
+  }
+
+
+  return group;
+
+}
+
+
+/* =========================================================
+   INIT 3D
+========================================================= */
+
+function init3D() {
+
+  const viewer =
+    document.getElementById(
+      "viewer"
+    );
+
+
+  scene =
+    new THREE.Scene();
+
+
+  scene.background =
+    new THREE.Color(
+      0x071018
+    );
+
+
+  camera =
+    new THREE.PerspectiveCamera(
+      42,
+      viewer.clientWidth /
+        viewer.clientHeight,
+      0.1,
+      100
+    );
+
+
+  camera.position.set(
+    4,
+    3,
+    6
+  );
+
+
+  renderer =
+    new THREE.WebGLRenderer({
+      antialias: true
+    });
+
+
+  renderer.setPixelRatio(
+    Math.min(
+      window.devicePixelRatio,
+      2
+    )
+  );
+
+
+  renderer.setSize(
+    viewer.clientWidth,
+    viewer.clientHeight
+  );
+
+
+  renderer.outputColorSpace =
+    THREE.SRGBColorSpace;
+
+
+  viewer.insertBefore(
+    renderer.domElement,
+    viewer.firstChild
+  );
+
+
+  /* LIGHT */
+
+  scene.add(
+    new THREE.HemisphereLight(
+      0xbdefff,
+      0x101522,
+      2.2
+    )
+  );
+
+
+  const directional =
+    new THREE.DirectionalLight(
+      0xffffff,
+      3
+    );
+
+  directional.position.set(
+    5,
+    7,
+    5
+  );
+
+  scene.add(
+    directional
+  );
+
+
+  const blueLight =
+    new THREE.PointLight(
+      0x38d9ff,
+      12,
+      15
+    );
+
+  blueLight.position.set(
+    -4,
+    2,
+    -3
+  );
+
+  scene.add(
+    blueLight
+  );
+
+
+  modelGroup =
+    new THREE.Group();
+
+
+  scene.add(
+    modelGroup
+  );
+
+
+  /* MOUSE */
+
+  viewer.addEventListener(
+    "pointerdown",
+    event => {
+
+      dragging = true;
+
+      previousX =
+        event.clientX;
+
+      previousY =
+        event.clientY;
+
+    }
+  );
+
+
+  viewer.addEventListener(
+    "pointermove",
+    event => {
+
+      if (!dragging)
+        return;
+
+
+      rotationY +=
+        (event.clientX -
+          previousX) *
+        0.012;
+
+
+      rotationX +=
+        (event.clientY -
+          previousY) *
+        0.008;
+
+
+      rotationX =
+        Math.max(
+          -1.3,
+          Math.min(
+            1.3,
+            rotationX
+          )
+        );
+
+
+      previousX =
+        event.clientX;
+
+      previousY =
+        event.clientY;
+
+    }
+  );
+
+
+  window.addEventListener(
+    "pointerup",
+    () => {
+
+      dragging = false;
+
+    }
+  );
+
+
+  /* ZOOM */
+
+  viewer.addEventListener(
+    "wheel",
+    event => {
+
+      event.preventDefault();
+
+
+      zoomDistance +=
+        event.deltaY *
+        0.006;
+
+
+      zoomDistance =
+        Math.max(
+          3,
+          Math.min(
+            10,
+            zoomDistance
+          )
+        );
+
+    },
+    {
+      passive: false
+    }
+  );
+
+
+  /* RESET */
+
+  viewer.addEventListener(
+    "dblclick",
+    () => {
+
+      rotationX =
+        0.15;
+
+      rotationY =
+        0.35;
+
+      zoomDistance =
+        6;
+
+    }
+  );
+
+
+  animate3D();
+
+}
+
+
+/* =========================================================
+   FIT MODEL
+========================================================= */
+
+function fitModel() {
+
+  if (!modelGroup)
+    return;
+
+
+  const box =
+    new THREE.Box3()
+      .setFromObject(
+        modelGroup
+      );
+
+
+  const size =
+    box.getSize(
+      new THREE.Vector3()
+    );
+
+
+  const largest =
+    Math.max(
+      size.x,
+      size.y,
+      size.z
+    );
+
+
+  if (largest > 0) {
+
+    const scale =
+      3.2 / largest;
+
+    modelGroup.scale.setScalar(
+      scale
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SHOW 3D
+========================================================= */
+
+function show3D(index) {
+
+  if (!modelGroup)
+    return;
+
+
+  while (
+    modelGroup.children.length
+  ) {
+
+    modelGroup.remove(
+      modelGroup.children[0]
+    );
+
+  }
+
+
+  const newModel =
+    createHardwareModel(
+      index
+    );
+
+
+  modelGroup.add(
+    newModel
+  );
+
+
+  fitModel();
+
+}
+
+
+/* =========================================================
+   ANIMATION
+========================================================= */
+
+function animate3D() {
+
+  requestAnimationFrame(
+    animate3D
+  );
+
+
+  if (
+    modelGroup &&
+    !dragging
+  ) {
+
+    rotationY +=
+      0.002;
+
+  }
+
+
+  if (modelGroup) {
+
+    modelGroup.rotation.x =
+      rotationX;
+
+    modelGroup.rotation.y =
+      rotationY;
+
+  }
+
+
+  if (camera) {
+
+    camera.position.x =
+      Math.sin(0.35) *
+      zoomDistance;
+
+    camera.position.z =
+      Math.cos(0.35) *
+      zoomDistance;
+
+    camera.position.y =
+      3;
+
+
+    camera.lookAt(
+      0,
+      0,
+      0
+    );
+
+
+    renderer.render(
+      scene,
+      camera
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   OPEN HARDWARE
+========================================================= */
+
+function openHardware(index) {
+
+  const item =
+    hardware[index];
+
+
+  document.getElementById(
+    "detailCategory"
+  ).textContent =
+    item.category;
+
+
+  document.getElementById(
+    "detailName"
+  ).textContent =
+    item.name;
+
+
+  document.getElementById(
+    "detailDescription"
+  ).textContent =
+    item.description;
+
+
+  document.getElementById(
+    "specGrid"
+  ).innerHTML =
+    item.specs.map(
+      spec => `
+
+        <div class="spec-box">
+
+          <small>
+            ${spec[0]}
+          </small>
+
+          ${spec[1]}
+
+        </div>
+
+      `
+    ).join("");
+
+
+  document.getElementById(
+    "detailUses"
+  ).innerHTML =
+    item.uses.map(
+      use => `
+        <li>
+          ${use}
+        </li>
+      `
+    ).join("");
+
+
+  modal.classList.add(
+    "show"
+  );
+
+
+  setTimeout(
+    () => show3D(index),
+    50
+  );
+
+}
+
+
+/* =========================================================
+   RESIZE 3D
+========================================================= */
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    if (
+      !camera ||
+      !renderer
+    )
+      return;
+
+
+    const viewer =
+      document.getElementById(
+        "viewer"
+      );
+
+
+    camera.aspect =
+      viewer.clientWidth /
+      viewer.clientHeight;
+
+
+    camera.updateProjectionMatrix();
+
+
+    renderer.setSize(
+      viewer.clientWidth,
+      viewer.clientHeight
+    );
+
+  }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+renderHardware();
+
+init3D();
+
+
+/* =========================================================
+   LOADING FINISH
+========================================================= */
+
+window.addEventListener(
+  "load",
+  () => {
+
+    setTimeout(
+      () => {
+
+        document
+          .getElementById(
+            "loadingScreen"
+          )
+          .classList.add(
+            "hidden"
+          );
+
+      },
+      1000
+    );
+
+  }
+);
+
+</script>
+
+</body>
+</html>
